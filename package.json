@@ -19,7 +19,17 @@
 				"command": "vs-code-autocomment.helloWorld",
 				"title": "Hello World"
 			}
-		]
+		],
+		"configuration": {
+			"properties": {
+				"vs-code-autocomment.codexKey": {
+					"type": "string",
+					"title": "Open AI API Key",
+					"description": "API Key for OpenAI Codex",
+					"default": null
+				}
+			}
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
