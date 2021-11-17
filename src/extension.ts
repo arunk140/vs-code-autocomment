@@ -17,17 +17,17 @@ export function activate(context: vscode.ExtensionContext) {
 		// The code you place here will be executed every time your command is executed
 		// Display a message box to the user
 		if (isCodexKeySet()) {
-			console.log(getSelectedText());
 			getComment(getSelectedText()).then(comment => {
 				vscode.window.showInformationMessage(comment);
 			});
+		} else {
+			showSetupKeyPopup();
 		}
 	});
 
 	context.subscriptions.push(disposable);
 }
 
-// A Function to check if Codex Key is set
 function isCodexKeySet(): boolean {
 	var extConfig = vscode.workspace.getConfiguration('vs-code-autocomment');
 	if (extConfig.get('codexKey') === null || extConfig.get('codexKey') === '') {
@@ -42,11 +42,14 @@ function testCodexKey(): void {
 		showSetupKeyPopup();
 	}
 }
+
 function showSetupKeyPopup(): void {
-	vscode.window.showInformationMessage('Please set the Open AI API Key in the settings', 'Open Settings').then(selection => {
+	vscode.window.showInformationMessage('Please set the Open AI API Key in the settings', 'Open Settings')
+	.then(selection => {
 		if (selection === 'Open Settings') {
 			vscode.commands.executeCommand('workbench.action.openSettings', 'vs-code-autocomment');
-		}});
+		}
+	});
 }
 	
 function getSelectedText(): string|undefined {
@@ -70,18 +73,17 @@ async function getComment(text: string|undefined) {
 		"prompt": text + commentPostfix,
 		// eslint-disable-next-line @typescript-eslint/naming-convention
 		"max_tokens": 50,
-		"temperature": 1,
+		"temperature": 0.9,
 		// eslint-disable-next-line @typescript-eslint/naming-convention
 		"top_p": 1,
 		"n": 1,
 		"stream": false,
 		"logprobs": null,
-		"stop": "."
+		"stop": ["\n", "."]
 	};
 	//Check if response is not 401
 	try {
-		const response = await postRequest(' https://api.openai.com/v1/engines/davinci-codex/completions', body);
-		console.log(response.data.choices);
+		const response = await postRequest('https://api.openai.com/v1/engines/davinci-codex/completions', body);
 		return response.data.choices[0].text;
 	} catch (error) {
 		showSetupKeyPopup();

@@ -17,7 +17,7 @@
     "commands": [
 	  {
         "command": "vs-code-autocomment.genCommentFrmSelection",
-        "title": "Generate Comment"
+        "title": "Generate Comment from Selection"
       }
     ],
 	"menus": {
