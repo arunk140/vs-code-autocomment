@@ -1,6 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import * as lp from './languagePrefix';
 const axios = require('axios');
 
 // this method is called when your extension is activated
@@ -17,8 +18,24 @@ export function activate(context: vscode.ExtensionContext) {
 		// The code you place here will be executed every time your command is executed
 		// Display a message box to the user
 		if (isCodexKeySet()) {
-			getComment(getSelectedText()).then(comment => {
-				vscode.window.showInformationMessage(comment);
+			const text = getSelectedText();
+			const languageId = vscode.window.activeTextEditor?.document.languageId;
+			getComment(text, languageId).then(comment => {
+				const editor = vscode.window.activeTextEditor;
+				if (!editor) {
+					return;
+				}
+				const selection = editor.selection;
+				editor.edit(editBuilder => {
+					const docString
+					= lp.startTokens[languageId?languageId:'javascript']
+						+ comment
+						+ lp.stopTokens[languageId?languageId:'javascript']
+						+ "\n";
+					editBuilder.insert(selection.start, docString);
+				});
+			}).catch(error => {
+				vscode.window.showErrorMessage(error);
 			});
 		} else {
 			showSetupKeyPopup();
@@ -64,22 +81,46 @@ function getSelectedText(): string|undefined {
 	return editor.document.getText(selection);
 }
 
-async function getComment(text: string|undefined) {
-	if(text === undefined) {
+function structureLangPrefix(languageId: string): string {
+	if (languageId === undefined) {
+		return '';
+	}
+	const langExamples = lp.languages[languageId];
+	const langStopToken = lp.stopTokens[languageId];
+	const langGenString = lp.generateStr[languageId];
+	var prefix = '';
+
+	langExamples.forEach(ex => {
+		prefix 
+		+=  ex.code 
+			+ '\n'
+			+ langGenString
+			+ '\n'
+			+ ex.comment
+			+ '\n'
+			+ langStopToken
+			+ '\n';
+	});
+	return prefix;
+}
+
+async function getComment(text: string|undefined, languageId: string|undefined) {
+	if(text === undefined || languageId === undefined) {
 		return 'No text selected';
 	}
-	const commentPostfix = "\n/* Describe the above code: \n";
+	const commentPostfix = "\n" + lp.generateStr[languageId];
+	const promptText = structureLangPrefix(languageId) + '\n' + text + commentPostfix;
 	const body = {
-		"prompt": text + commentPostfix,
+		"prompt": promptText,
 		// eslint-disable-next-line @typescript-eslint/naming-convention
 		"max_tokens": 50,
-		"temperature": 0.9,
+		"temperature": 0,
 		// eslint-disable-next-line @typescript-eslint/naming-convention
 		"top_p": 1,
 		"n": 1,
 		"stream": false,
 		"logprobs": null,
-		"stop": ["\n", "."]
+		"stop": lp.stopTokens[languageId]
 	};
 	//Check if response is not 401
 	try {
