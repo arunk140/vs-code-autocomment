@@ -20,20 +20,24 @@ export function activate(context: vscode.ExtensionContext) {
 		if (isCodexKeySet()) {
 			const text = getSelectedText();
 			const languageId = vscode.window.activeTextEditor?.document.languageId;
+			const editor = vscode.window.activeTextEditor;
+			if (!editor) {
+				return;
+			}
+			const selection = editor.selection;
+			const lines = text? text.split('\n'):[''];
+			const indentationCount = tabCount(lines[0], getTabConfig());
+			console.log(indentationCount);
 			getComment(text, languageId).then(comment => {
-				const editor = vscode.window.activeTextEditor;
-				if (!editor) {
-					return;
-				}
-				const selection = editor.selection;
-				editor.edit(editBuilder => {
-					const docString
+				const docString
 					= lp.startTokens[languageId?languageId:'javascript']
-						+ comment
-						+ lp.stopTokens[languageId?languageId:'javascript']
-						+ "\n";
-					editBuilder.insert(selection.start, docString);
-				});
+					+ comment
+					+ lp.stopTokens[languageId?languageId:'javascript']
+					+ "\n";
+				const docStringWithIndentation = '\t'.repeat(indentationCount) + docString.replace(/\n/g, '\n' + '\t'.repeat(indentationCount));
+				editor.edit(editBuilder => {
+					editBuilder.insert(selection.start, docStringWithIndentation);
+				}); 
 			}).catch(error => {
 				vscode.window.showErrorMessage(error);
 			});
@@ -43,6 +47,30 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	context.subscriptions.push(disposable);
+}
+
+function tabCount (line: string, tabConfig: any): number {
+	let count = 0;	
+	let indentString = tabConfig.insertSpaces ? ' '.repeat(tabConfig.tabSize) : '\t';
+	for (let i = 0; i < line.length; i+=indentString.length) {
+		if (line.substr(i, indentString.length) === indentString) {
+			count++;
+		} else {
+			break;
+		}
+	}
+	return count;
+};
+
+function getTabConfig() {
+	const editor = vscode.window.activeTextEditor;
+	if (!editor) {
+		return;
+	}
+	return {
+		tabSize: editor.options.tabSize,
+		insertSpaces: editor.options.insertSpaces
+	};
 }
 
 function isCodexKeySet(): boolean {
