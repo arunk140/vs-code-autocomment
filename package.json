@@ -15,7 +15,7 @@
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
-	  {
+	    {
         "command": "vs-code-autocomment.genCommentFrmSelection",
         "title": "Generate Comment from Selection"
       }
@@ -23,8 +23,8 @@
 	"menus": {
 		"editor/context": [
 		  {
-			"when": "editorHasSelection",
-			"command": "vs-code-autocomment.genCommentFrmSelection"
+        "when": "editorHasSelection && editorLangId =~ /^typescript$|^python$|^php$|^java$|^javascript$/",
+        "command": "vs-code-autocomment.genCommentFrmSelection"
 		  }
 		]
 	},
