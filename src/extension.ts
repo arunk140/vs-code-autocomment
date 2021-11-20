@@ -1,22 +1,10 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
 import * as lp from './languagePrefix';
 const axios = require('axios');
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
 	testCodexKey();
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
 	let disposable = vscode.commands.registerCommand('vs-code-autocomment.genCommentFrmSelection', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
 		if (isCodexKeySet()) {
 			const text = getSelectedText();
 			const languageId = vscode.window.activeTextEditor?.document.languageId;
@@ -27,7 +15,6 @@ export function activate(context: vscode.ExtensionContext) {
 			const selection = editor.selection;
 			const lines = text? text.split('\n'):[''];
 			const indentationCount = tabCount(lines[0], getTabConfig());
-			console.log(indentationCount);
 			getComment(text, languageId).then(comment => {
 				const docString
 					= lp.startTokens[languageId?languageId:'javascript']
@@ -35,8 +22,9 @@ export function activate(context: vscode.ExtensionContext) {
 					+ lp.stopTokens[languageId?languageId:'javascript']
 					+ "\n";
 				const docStringWithIndentation = '\t'.repeat(indentationCount) + docString.replace(/\n/g, '\n' + '\t'.repeat(indentationCount));
+				const docStringWithIndentationTrimmed = docStringWithIndentation.substring(0, docStringWithIndentation.length - indentationCount);
 				editor.edit(editBuilder => {
-					editBuilder.insert(selection.start, docStringWithIndentation);
+					editBuilder.insert(selection.start, docStringWithIndentationTrimmed);
 				}); 
 			}).catch(error => {
 				vscode.window.showErrorMessage(error);
@@ -45,7 +33,6 @@ export function activate(context: vscode.ExtensionContext) {
 			showSetupKeyPopup();
 		}
 	});
-
 	context.subscriptions.push(disposable);
 }
 
