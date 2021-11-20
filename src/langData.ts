@@ -117,4 +117,75 @@ var pythonExamples = [
     }
 ];
 
-export { jsExamples, pythonExamples };
+var javaExamples = [
+    {
+        code: `public void setName(String newName) {   
+            name = newName;
+        }`,
+        comment: `* Changes the name of this Student.
+* This may involve a lengthy legal process.
+* @param newName This Student's new name.`
+    },
+    {
+        code: `public static void reverse(List<?> list) {
+            int size = list.size();
+            if (size < REVERSE_THRESHOLD || list instanceof RandomAccess) {
+                for (int i=0, mid=size>>1, j=size-1; i<mid; i++, j--)
+                    swap(list, i, j);
+            } else {
+                ListIterator fwd = list.listIterator();
+                ListIterator rev = list.listIterator(size);
+                for (int i=0, mid=list.size()>>1; i<mid; i++) {
+                    Object tmp = fwd.next();
+                    fwd.set(rev.previous());
+                    rev.set(tmp);
+                }
+            }
+        }`,
+        comment: `* Reverses the order of the elements in the specified list.
+*
+* This method runs in linear time.
+*
+* @param  list the list whose elements are to be reversed.
+* @throws UnsupportedOperationException if the specified list or
+*         its list-iterator does not support the set operation.`
+    },
+    {
+        code: `public static <T> void fill(List<? super T> list, T obj) {
+            int size = list.size();
+        
+            if (size < FILL_THRESHOLD || list instanceof RandomAccess) {
+                for (int i=0; i<size; i++)
+                    list.set(i, obj);
+            } else {
+                ListIterator<? super T> itr = list.listIterator();
+                for (int i=0; i<size; i++) {
+                    itr.next();
+                    itr.set(obj);
+                }
+            }
+        }`,
+        comment: `* Replaces all of the elements of the specified list with the specified
+* element.
+*
+* This method runs in linear time.
+*
+* @param  list the list to be filled with the specified element.
+* @param  obj The element with which to fill the specified list.
+* @throws UnsupportedOperationException if the specified list or its
+*         list-iterator does not support the <tt>set</tt> operation.`
+    },
+    {
+        code: `public static double toMetric(int feet, int inches) {
+            int total = feet * IN_PER_FOOT + inches;
+            return total * CM_PER_INCH;
+        }`,
+        comment: `* Converts a length in feet and inches to centimeters.
+*
+* @param feet how many feet
+* @param inches how many inches
+* @return length in centimeters`
+    }
+];
+
+export { jsExamples, pythonExamples, javaExamples };
