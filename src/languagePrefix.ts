@@ -1,4 +1,4 @@
-import { javaExamples, jsExamples, pythonExamples } from "./langData";
+import { javaExamples, jsExamples, phpExamples, pythonExamples } from "./langData";
 
 interface LangExamples {
     [key: string]: {
@@ -14,13 +14,15 @@ var startTokens = <StringTokens> {
     'javascript': "/**",
     'typescript': "/**",
     'python': "\"\"\"",
-    'java': "/**"
+    'java': "/**",
+    'php': "/**"
 };
 var stopTokens = <StringTokens> {
     'javascript': "*/",
     'typescript': "*/",
     'python': "\"\"\"",
-    'java': "*/"
+    'java': "*/",
+    'php': "*/"
 };
 var generateStr = <StringTokens> {
     'javascript': `/**
@@ -30,12 +32,15 @@ var generateStr = <StringTokens> {
     'python': `\"\"\"
     Docs for the above code:`,
     'java': `/**
+    * Docs for the above code:`,
+    'php': `/**
     * Docs for the above code:`
 };
 var languages = <LangExamples> {
     'javascript': jsExamples,
     'typescript': jsExamples,
     'python': pythonExamples,
-    'java': javaExamples
+    'java': javaExamples,
+    'php': phpExamples
 };
 export { startTokens, stopTokens, generateStr, languages};

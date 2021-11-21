@@ -188,4 +188,20 @@ var javaExamples = [
     }
 ];
 
-export { jsExamples, pythonExamples, javaExamples };
+var phpExamples = [
+    {
+        code: `function compute_tax($amount, $tax_rate) {
+            $tax_amount = $0;
+            $tax_amount = $amount * ($tax_rate / 100);
+            return $tax_amount;
+        }`,
+        comment: `* Computer Value Added Tax
+*
+* @access public
+* @param float $amount The amount to compute tax on
+* @param float $tax_rate Tax Rate in percentage
+* @return float $tax_amount The amount of tax to be added to the amount`
+    }
+];
+
+export { jsExamples, pythonExamples, javaExamples, phpExamples };
