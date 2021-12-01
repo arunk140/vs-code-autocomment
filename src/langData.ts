@@ -63,12 +63,12 @@ var pythonExamples = [
         return reverse_str1`,
         comment: 
         `Returns the reversed String.
+        
+Parameters:
+    str1 (str):The string which is to be reversed.
 
-    Parameters:
-        str1 (str):The string which is to be reversed.
-
-    Returns:
-        reverse(str1):The string which gets reversed.`
+Returns:
+    reverse(str1):The string which gets reversed.`
     },
     {
         code: `def add_binary(a, b):
@@ -77,12 +77,12 @@ var pythonExamples = [
         comment: 
         `Returns the sum of two decimal numbers in binary digits.
 
-    Parameters:
-        a (int): A decimal integer
-        b (int): Another decimal integer
+Parameters:
+    a (int): A decimal integer
+    b (int): Another decimal integer
 
-    Returns:
-        binary_sum (str): Binary string of the sum of a and b`
+Returns:
+    binary_sum (str): Binary string of the sum of a and b`
     },
     {
         code: `def info(self, additional=""):
@@ -90,10 +90,10 @@ var pythonExamples = [
         comment: 
         `Prints the person's name and age. If the argument 'additional' is passed, then it is appended after the main info.
 
-    Parameters:
-        additional (str, optional): More info to be displayed (default is None)
-    Returns:
-        None`
+Parameters:
+    additional (str, optional): More info to be displayed (default is None)
+Returns:
+    None`
     },
     {
         code: `def get_spreadsheet_cols(file_loc, print_cols=False):
@@ -107,13 +107,13 @@ var pythonExamples = [
         comment: 
         `Gets and prints the spreadsheet's header columns
 
-    Parameters:
-        file_loc (str): The file location of the spreadsheet
-        print_cols (bool, optional): A flag used to print the columns 
-            to the console (default is False)
+Parameters:
+    file_loc (str): The file location of the spreadsheet
+    print_cols (bool, optional): A flag used to print the columns 
+        to the console (default is False)
 
-    Returns:
-        col_headers (list) : a list of strings used that are the header columns`
+Returns:
+    col_headers (list) : a list of strings used that are the header columns`
     }
 ];
 
