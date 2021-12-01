@@ -26,15 +26,15 @@ var stopTokens = <StringTokens> {
 };
 var generateStr = <StringTokens> {
     'javascript': `/**
-    * Docs for the above code:`,
+    * Docstring for the above code:`,
     'typescript': `/**
-    * Docs for the above code:`,
+    * Docstring for the above code:`,
     'python': `\"\"\"
-    Docs for the above code:`,
+    Docstring for the above code:`,
     'java': `/**
-    * Docs for the above code:`,
+    * Docstring for the above code:`,
     'php': `/**
-    * Docs for the above code:`
+    * Docstring for the above code:`
 };
 var languages = <LangExamples> {
     'javascript': jsExamples,

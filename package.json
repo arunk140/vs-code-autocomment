@@ -30,11 +30,30 @@
 	},
     "configuration": {
       "properties": {
-        "vs-code-autocomment.codexKey": {
+        "vs-code-autocomment.openAI.Key": {
           "type": "string",
-          "title": "Open AI API Key",
-          "description": "API Key for OpenAI Codex",
+          "description": "The OpenAI API uses API keys for authentication. Visit your Open AI API Keys page to retrieve the API key you'll use in your requests.",
           "default": null
+        },
+        "vs-code-autocomment.openAI.temperature": {
+          "type": "number",
+          "description": "Higher values means the model will take more risks. Try 0.9 for more creative applications, and 0 (argmax sampling) for ones with a well-defined answer.",
+          "default": "0.9"
+        },
+        "vs-code-autocomment.openAI.appendPredefinedExamples": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enabling this will improve the accuracy of the output but will send more Input tokens (Preset Examples) to the Open AI API."
+        },
+        "vs-code-autocomment.openAI.Engine": {
+          "type": "string",
+          "description": "The ID of the engine to use for this request.",
+          "default": "davinci-codex",
+          "enum": ["davinci-codex", "cushman-codex"],
+          "enumDescriptions": [
+            "Most capable Codex model. Particularly good at translating natural language to code.",
+            "Almost as capable as Davinci Codex, but slightly faster. This speed advantage may make it preferable for real-time applications."
+          ]
         }
       }
     }

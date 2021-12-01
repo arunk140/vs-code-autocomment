@@ -123,13 +123,19 @@ async function getComment(text: string|undefined, languageId: string|undefined) 
 	if(text === undefined || languageId === undefined) {
 		return 'No text selected';
 	}
+	const engine:string = vscode.workspace.getConfiguration('vs-code-autocomment').get('openAI.Engine') ?? 'davinci-codex';
+	const temperature:number = vscode.workspace.getConfiguration('vs-code-autocomment').get('openAI.temperature') ?? 0;
+	const appendExamples:boolean = vscode.workspace.getConfiguration('vs-code-autocomment').get('openAI.appendPredefinedExamples') ?? false;
+
+	const url = 'https://api.openai.com/v1/engines/' + engine + '/completions';
 	const commentPostfix = "\n" + lp.generateStr[languageId];
-	const promptText = structureLangPrefix(languageId) + '\n' + text + commentPostfix;
+	const promptText = (appendExamples?structureLangPrefix(languageId):"") + '\n' + text + commentPostfix;
+	
 	const body = {
 		"prompt": promptText,
 		// eslint-disable-next-line @typescript-eslint/naming-convention
-		"max_tokens": 50,
-		"temperature": 0,
+		"max_tokens": 100,
+		"temperature": temperature,
 		// eslint-disable-next-line @typescript-eslint/naming-convention
 		"top_p": 1,
 		"n": 1,
@@ -137,9 +143,9 @@ async function getComment(text: string|undefined, languageId: string|undefined) 
 		"logprobs": null,
 		"stop": lp.stopTokens[languageId]
 	};
-	//Check if response is not 401
+
 	try {
-		const response = await postRequest('https://api.openai.com/v1/engines/davinci-codex/completions', body);
+		const response = await postRequest(url, body);
 		return response.data.choices[0].text;
 	} catch (error) {
 		showSetupKeyPopup();
@@ -152,7 +158,7 @@ function postRequest(url: string, data: any): Promise<any> {
 			// eslint-disable-next-line @typescript-eslint/naming-convention
 			'Content-Type': 'application/json',
 			// eslint-disable-next-line @typescript-eslint/naming-convention
-			'Authorization':'Bearer '+vscode.workspace.getConfiguration('vs-code-autocomment').get('codexKey')
+			'Authorization':'Bearer ' + vscode.workspace.getConfiguration('vs-code-autocomment').get('openAI.Key') ?? ''
 		}
 	});
 }
