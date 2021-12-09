@@ -6,12 +6,12 @@ export function activate(context: vscode.ExtensionContext) {
 	testCodexKey();
 	let disposable = vscode.commands.registerCommand('vs-code-autocomment.genCommentFrmSelection', () => {
 		if (isCodexKeySet()) {
-			const text = getSelectedText();
-			const languageId = vscode.window.activeTextEditor?.document.languageId;
 			const editor = vscode.window.activeTextEditor;
 			if (!editor) {
 				return;
 			}
+			const text = getSelectedText();
+			const languageId = vscode.window.activeTextEditor?.document.languageId;
 			const selection = editor.selection;
 			const lines = text? text.split('\n'):[''];
 			const indentationCount = tabCount(lines[0], getTabConfig());
@@ -25,7 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
 				const docStringWithIndentationTrimmed = docStringWithIndentation.substring(0, docStringWithIndentation.length - indentationCount);
 				editor.edit(editBuilder => {
 					editBuilder.insert(selection.start, docStringWithIndentationTrimmed);
-				}); 
+				});
 			}).catch(error => {
 				vscode.window.showErrorMessage(error);
 			});
@@ -62,7 +62,7 @@ function getTabConfig() {
 
 function isCodexKeySet(): boolean {
 	var extConfig = vscode.workspace.getConfiguration('vs-code-autocomment');
-	if (extConfig.get('codexKey') === null || extConfig.get('codexKey') === '') {
+	if (extConfig.get('openAI.Key') === null || extConfig.get('openAI.Key') === '') {
 		return false;
 	} else {
 		return true;
@@ -125,7 +125,7 @@ async function getComment(text: string|undefined, languageId: string|undefined) 
 	}
 	const engine:string = vscode.workspace.getConfiguration('vs-code-autocomment').get('openAI.Engine') ?? 'davinci-codex';
 	const temperature:number = vscode.workspace.getConfiguration('vs-code-autocomment').get('openAI.temperature') ?? 0;
-	const appendExamples:boolean = vscode.workspace.getConfiguration('vs-code-autocomment').get('openAI.appendPredefinedExamples') ?? false;
+	const appendExamples:boolean = vscode.workspace.getConfiguration('vs-code-autocomment').get('general.appendPredefinedExamples') ?? true;
 
 	const url = 'https://api.openai.com/v1/engines/' + engine + '/completions';
 	const commentPostfix = "\n" + lp.generateStr[languageId];

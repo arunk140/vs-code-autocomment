@@ -30,7 +30,7 @@
 	},
     "configuration": {
       "properties": {
-        "vs-code-autocomment.openAI.Key": {
+        "vs-code-autocomment.openAI.key": {
           "type": "string",
           "description": "The OpenAI API uses API keys for authentication. Visit your Open AI API Keys page to retrieve the API key you'll use in your requests.",
           "default": null
@@ -40,12 +40,12 @@
           "description": "Higher values means the model will take more risks. Try 0.9 for more creative applications, and 0 (argmax sampling) for ones with a well-defined answer.",
           "default": "0.9"
         },
-        "vs-code-autocomment.openAI.appendPredefinedExamples": {
+        "vs-code-autocomment.general.appendPredefinedExamples": {
           "type": "boolean",
           "default": false,
           "description": "Enabling this will improve the accuracy of the output but will send more Input tokens (Preset Examples) to the Open AI API."
         },
-        "vs-code-autocomment.openAI.Engine": {
+        "vs-code-autocomment.openAI.engine": {
           "type": "string",
           "description": "The ID of the engine to use for this request.",
           "default": "davinci-codex",

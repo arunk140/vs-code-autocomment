@@ -190,17 +190,36 @@ var javaExamples = [
 
 var phpExamples = [
     {
-        code: `function compute_tax($amount, $tax_rate) {
+        code: `public function compute_tax($amount, $tax_rate) {
             $tax_amount = $0;
             $tax_amount = $amount * ($tax_rate / 100);
             return $tax_amount;
         }`,
-        comment: `* Computer Value Added Tax
+        comment: `* Compute Value Added Tax based on amount and a tax rate
 *
 * @access public
 * @param float $amount The amount to compute tax on
 * @param float $tax_rate Tax Rate in percentage
 * @return float $tax_amount The amount of tax to be added to the amount`
+    },
+    {
+        code: `private function executeStatement( $statement = "" , $parameters = [] ){
+            try{
+            
+                $stmt = $this->connection->prepare($statement);
+                $stmt->execute($parameters);
+                return $stmt;
+                
+            }catch(Exception $e){
+                throw new Exception($e->getMessage());   
+            }		
+        }`,
+        comment: `* Execute a prepared statement on an active database connection
+*
+* @access private
+* @param string $statement The statement to execute
+* @param array $parameters The parameters to pass to the statement
+* @return PDOStatement $stmt The statement object`
     }
 ];
 
