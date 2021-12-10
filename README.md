@@ -1,6 +1,6 @@
-# VS Code Extension - DocString Generator (Powered by Open AI) - README
+# VS Code Extension - DocString Comment Generator 
 
----
+## Powered by Open AI
 
 Automatically generate DocString Comments for Functions and Classes using the Open AI API.  
 
