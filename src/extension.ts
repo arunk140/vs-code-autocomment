@@ -15,7 +15,7 @@ export function activate(context: vscode.ExtensionContext) {
 		const selection = editor.selection;
 		const lines = text? text.split('\n'):[''];
 		const lng = languageId?languageId:'javascript';
-		const blankLines = preBlankLineCount(text as string);
+		const blankLines = preBlankLineCount(lines);
 
 		const tabConfig = getTabConfig();
 		let indentationCount = tabCount(lines[blankLines], tabConfig);
@@ -55,9 +55,9 @@ function tabCount (line: string, tabConfig: any): number {
 	return count;
 };
 
-function preBlankLineCount (text: string): number {
-	let count = 0;	
-	let lines = text.split('\n');
+function preBlankLineCount (lines:string[]): number {
+	let count = 0;
+	if (lines.length <= 1) { return count; }
 	for (let lineNum = 0; lineNum < lines.length; lineNum++) {
 		const line = lines[lineNum].trim();
 		if (line === '') { count++; }
