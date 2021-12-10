@@ -5,33 +5,28 @@ const axios = require('axios');
 export function activate(context: vscode.ExtensionContext) {
 	testCodexKey();
 	let disposable = vscode.commands.registerCommand('vs-code-autocomment.genCommentFrmSelection', () => {
-		if (isCodexKeySet()) {
-			const editor = vscode.window.activeTextEditor;
-			if (!editor) {
-				return;
-			}
-			const text = getSelectedText();
-			const languageId = vscode.window.activeTextEditor?.document.languageId;
-			const selection = editor.selection;
-			const lines = text? text.split('\n'):[''];
-			const indentationCount = tabCount(lines[0], getTabConfig());
-			getComment(text, languageId).then(comment => {
-				const docString
-					= lp.startTokens[languageId?languageId:'javascript']
-					+ comment
-					+ lp.stopTokens[languageId?languageId:'javascript']
-					+ "\n";
-				const docStringWithIndentation = '\t'.repeat(indentationCount) + docString.replace(/\n/g, '\n' + '\t'.repeat(indentationCount));
-				const docStringWithIndentationTrimmed = docStringWithIndentation.substring(0, docStringWithIndentation.length - indentationCount);
-				editor.edit(editBuilder => {
-					editBuilder.insert(selection.start, docStringWithIndentationTrimmed);
-				});
-			}).catch(error => {
-				vscode.window.showErrorMessage(error);
+		if (!isCodexKeySet()) { showSetupKeyPopup(); }
+		const editor = vscode.window.activeTextEditor;
+		if (!editor) { return; }
+		const text = getSelectedText();
+		const languageId = vscode.window.activeTextEditor?.document.languageId;
+		const selection = editor.selection;
+		const lines = text? text.split('\n'):[''];
+		const indentationCount = tabCount(lines[0], getTabConfig());
+		getComment(text, languageId).then(comment => {
+			const docString
+				= lp.startTokens[languageId?languageId:'javascript']
+				+ comment
+				+ lp.stopTokens[languageId?languageId:'javascript']
+				+ "\n";
+			const docStringWithIndentation = '\t'.repeat(indentationCount) + docString.replace(/\n/g, '\n' + '\t'.repeat(indentationCount));
+			const docStringWithIndentationTrimmed = docStringWithIndentation.substring(0, docStringWithIndentation.length - indentationCount);
+			editor.edit(editBuilder => {
+				editBuilder.insert(selection.start, docStringWithIndentationTrimmed);
 			});
-		} else {
-			showSetupKeyPopup();
-		}
+		}).catch(error => {
+			vscode.window.showErrorMessage(error);
+		});
 	});
 	context.subscriptions.push(disposable);
 }
@@ -51,9 +46,7 @@ function tabCount (line: string, tabConfig: any): number {
 
 function getTabConfig() {
 	const editor = vscode.window.activeTextEditor;
-	if (!editor) {
-		return;
-	}
+	if (!editor) { return; }
 	return {
 		tabSize: editor.options.tabSize,
 		insertSpaces: editor.options.insertSpaces
@@ -61,7 +54,7 @@ function getTabConfig() {
 }
 
 function isCodexKeySet(): boolean {
-	var extConfig = vscode.workspace.getConfiguration('vs-code-autocomment');
+	let extConfig = vscode.workspace.getConfiguration('vs-code-autocomment');
 	if (extConfig.get('openAI.Key') === null || extConfig.get('openAI.Key') === '') {
 		return false;
 	} else {
@@ -86,20 +79,15 @@ function showSetupKeyPopup(): void {
 	
 function getSelectedText(): string|undefined {
 	const editor = vscode.window.activeTextEditor;
-	if (!editor) {
-		return;
-	}
+	if (!editor) { return; }
 	const selection = editor.selection;
-	if (selection.isEmpty) {
-		return;
-	}
+	if (selection.isEmpty) { return; }
 	return editor.document.getText(selection);
 }
 
 function structureLangPrefix(languageId: string): string {
-	if (languageId === undefined) {
-		return '';
-	}
+	if (languageId === undefined) { return ''; }
+	
 	const langExamples = lp.languages[languageId];
 	const langStopToken = lp.stopTokens[languageId];
 	const langGenString = lp.generateStr[languageId];
