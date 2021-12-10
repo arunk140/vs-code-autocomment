@@ -17,7 +17,7 @@
     "commands": [
 	    {
         "command": "vs-code-autocomment.genCommentFrmSelection",
-        "title": "Generate Comment from Selection"
+        "title": "Generate DocString for Selection"
       }
     ],
 	"menus": {

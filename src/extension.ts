@@ -19,25 +19,35 @@ export function activate(context: vscode.ExtensionContext) {
 
 		const tabConfig = getTabConfig();
 		let indentationCount = tabCount(lines[blankLines], tabConfig);
-		getComment(text, languageId).then(comment => {
-			const docString
-				= lp.startTokens[lng]
-				+ comment
-				+ lp.stopTokens[lng]
-				+ "\n";
-			if (lng === 'python') { indentationCount += 1; }
-			const indentation = tabConfig?.insertSpaces? ' '.repeat(tabConfig.tabSize) : '\t';
-			const docStringWithIndentation = indentation.repeat(indentationCount) + docString.replace(/\n/g, '\n' + indentation.repeat(indentationCount));
-			const docStringWithIndentationTrimmed = docStringWithIndentation.substring(0, docStringWithIndentation.length - indentation.repeat(indentationCount).length);
-			editor.edit(editBuilder => {
-				let selStartLine = selection.start.line + blankLines;
-				if (lng === 'python') { selStartLine += 1; }
-				const start = new vscode.Position(selStartLine, 0);
-				editBuilder.insert(start, docStringWithIndentationTrimmed);
-			});
-		}).catch(error => {
-			vscode.window.showErrorMessage(error);
+		vscode.window.withProgress({
+			location: vscode.ProgressLocation.Notification,
+			title: 'Query Open AI API..',
+			cancellable: false
+		}, async (progress) => {
+			progress.report({ increment: 0 });
+			try{
+				const comment = await getComment(text, languageId);
+				const docString
+					= lp.startTokens[lng]
+					+ comment
+					+ lp.stopTokens[lng]
+					+ "\n";
+				if (lng === 'python') { indentationCount += 1; }
+				const indentation = tabConfig?.insertSpaces? ' '.repeat(tabConfig.tabSize) : '\t';
+				const docStringWithIndentation = indentation.repeat(indentationCount) + docString.replace(/\n/g, '\n' + indentation.repeat(indentationCount));
+				const docStringWithIndentationTrimmed = docStringWithIndentation.substring(0, docStringWithIndentation.length - indentation.repeat(indentationCount).length);
+				editor.edit(editBuilder => {
+					let selStartLine = selection.start.line + blankLines;
+					if (lng === 'python') { selStartLine += 1; }
+					const start = new vscode.Position(selStartLine, 0);
+					editBuilder.insert(start, docStringWithIndentationTrimmed);
+				});
+			} catch (error) {
+				vscode.window.showErrorMessage("Error: " + error);
+			}
+			progress.report({ increment: 100 });
 		});
+		
 	});
 	context.subscriptions.push(disposable);
 }
