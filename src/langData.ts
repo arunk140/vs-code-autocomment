@@ -12,6 +12,7 @@ var jsExamples = [
         }`,
         comment: 
         `* Generates a table head
+* 
 * @param {HTMLTableElement} table - The target HTML table
 * @param {Array} data - The array of cell header names
 * @return {void}`,
@@ -32,6 +33,7 @@ var jsExamples = [
         };`,
         comment: 
         `* Toggle visibility of a content tab
+* 
 * @param  {String} selector Selector for the element
 * @param  {Node}   toggle   The element that triggered the tab
 * @return {void}`,
@@ -45,6 +47,7 @@ var jsExamples = [
         }`,
         comment: 
         `* Calculates the area of a kite
+* 
 * @param  {Number} a The length of the base
 * @param  {Number} b The length of the height
 * @param  {Number} angle The angle of the kite
@@ -205,11 +208,9 @@ var phpExamples = [
     {
         code: `private function executeStatement( $statement = "" , $parameters = [] ){
             try{
-            
                 $stmt = $this->connection->prepare($statement);
                 $stmt->execute($parameters);
                 return $stmt;
-                
             }catch(Exception $e){
                 throw new Exception($e->getMessage());   
             }		
