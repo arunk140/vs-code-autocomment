@@ -1,6 +1,7 @@
 {
   "name": "vs-code-autocomment",
   "displayName": "OpenAI Auto DocString",
+  "repository" : "https://github.com/arunk140/vs-code-autocomment",
   "description": "Generate Docstrings for functions using the OpenAI API.",
   "version": "0.0.1",
   "engines": {
