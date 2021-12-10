@@ -8,6 +8,8 @@ Automatically generate DocString Comments for Functions and Classes using the Op
 
 Simply Highlight and Right Click on a Function (in PHP, Python, Java, TypeScript or JavaScript) and Select `Generate DocString from Selection`
 
+![Python Demo](demo.gif)
+
 ## Requirements
 
 - Open AI API Key (Required) - [Visit Website](https://openai.com/api/)
