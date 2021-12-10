@@ -2,6 +2,8 @@ import * as vscode from 'vscode';
 import * as lp from './languagePrefix';
 const axios = require('axios');
 
+interface TabConfig { insertSpaces: boolean; tabSize: number }
+
 export function activate(context: vscode.ExtensionContext) {
 	testCodexKey();
 	let disposable = vscode.commands.registerCommand('vs-code-autocomment.genCommentFrmSelection', () => {
@@ -12,17 +14,26 @@ export function activate(context: vscode.ExtensionContext) {
 		const languageId = vscode.window.activeTextEditor?.document.languageId;
 		const selection = editor.selection;
 		const lines = text? text.split('\n'):[''];
-		const indentationCount = tabCount(lines[0], getTabConfig());
+		const lng = languageId?languageId:'javascript';
+		const blankLines = preBlankLineCount(text as string);
+
+		const tabConfig = getTabConfig();
+		let indentationCount = tabCount(lines[blankLines], tabConfig);
 		getComment(text, languageId).then(comment => {
 			const docString
-				= lp.startTokens[languageId?languageId:'javascript']
+				= lp.startTokens[lng]
 				+ comment
-				+ lp.stopTokens[languageId?languageId:'javascript']
+				+ lp.stopTokens[lng]
 				+ "\n";
-			const docStringWithIndentation = '\t'.repeat(indentationCount) + docString.replace(/\n/g, '\n' + '\t'.repeat(indentationCount));
-			const docStringWithIndentationTrimmed = docStringWithIndentation.substring(0, docStringWithIndentation.length - indentationCount);
+			if (lng === 'python') { indentationCount += 1; }
+			const indentation = tabConfig?.insertSpaces? ' '.repeat(tabConfig.tabSize) : '\t';
+			const docStringWithIndentation = indentation.repeat(indentationCount) + docString.replace(/\n/g, '\n' + indentation.repeat(indentationCount));
+			const docStringWithIndentationTrimmed = docStringWithIndentation.substring(0, docStringWithIndentation.length - indentation.repeat(indentationCount).length);
 			editor.edit(editBuilder => {
-				editBuilder.insert(selection.start, docStringWithIndentationTrimmed);
+				let selStartLine = selection.start.line + blankLines;
+				if (lng === 'python') { selStartLine += 1; }
+				const start = new vscode.Position(selStartLine, 0);
+				editBuilder.insert(start, docStringWithIndentationTrimmed);
 			});
 		}).catch(error => {
 			vscode.window.showErrorMessage(error);
@@ -35,7 +46,7 @@ function tabCount (line: string, tabConfig: any): number {
 	let count = 0;	
 	let indentString = tabConfig.insertSpaces ? ' '.repeat(tabConfig.tabSize) : '\t';
 	for (let i = 0; i < line.length; i+=indentString.length) {
-		if (line.substr(i, indentString.length) === indentString) {
+		if (line.substring(i, i + indentString.length) === indentString) {
 			count++;
 		} else {
 			break;
@@ -44,12 +55,23 @@ function tabCount (line: string, tabConfig: any): number {
 	return count;
 };
 
-function getTabConfig() {
+function preBlankLineCount (text: string): number {
+	let count = 0;	
+	let lines = text.split('\n');
+	for (let lineNum = 0; lineNum < lines.length; lineNum++) {
+		const line = lines[lineNum].trim();
+		if (line === '') { count++; }
+		else { return count; }
+	}
+	return count;
+};
+
+function getTabConfig(): TabConfig|undefined {
 	const editor = vscode.window.activeTextEditor;
 	if (!editor) { return; }
 	return {
-		tabSize: editor.options.tabSize,
-		insertSpaces: editor.options.insertSpaces
+		tabSize: editor.options.tabSize as number,
+		insertSpaces: editor.options.insertSpaces as boolean
 	};
 }
 
@@ -80,9 +102,10 @@ function showSetupKeyPopup(): void {
 function getSelectedText(): string|undefined {
 	const editor = vscode.window.activeTextEditor;
 	if (!editor) { return; }
-	const selection = editor.selection;
-	if (selection.isEmpty) { return; }
-	return editor.document.getText(selection);
+	const start = new vscode.Position(editor.selection.start.line, 0);
+	const range = new vscode.Range(start, editor.selection.end);
+	if (range.isEmpty) { return; }
+	return editor.document.getText(range);
 }
 
 function structureLangPrefix(languageId: string): string {
