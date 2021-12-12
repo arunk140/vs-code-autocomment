@@ -21,7 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
 		let indentationCount = tabCount(lines[blankLines], tabConfig);
 		vscode.window.withProgress({
 			location: vscode.ProgressLocation.Notification,
-			title: 'Query Open AI API..',
+			"title": "Generating comment ...",
 			cancellable: false
 		}, async (progress) => {
 			progress.report({ increment: 0 });
