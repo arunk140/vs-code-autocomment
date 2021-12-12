@@ -52,6 +52,13 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(disposable);
 }
 
+/**
+* Count the number of the tabs on a line in the text editor
+* 
+* @param {String} line The string of the line
+* @param {Object} tabConfig The configuration of the tabs
+* @return {Number} The number of the tabs in the line
+*/
 function tabCount (line: string, tabConfig: any): number {
 	let count = 0;	
 	let indentString = tabConfig.insertSpaces ? ' '.repeat(tabConfig.tabSize) : '\t';
@@ -65,6 +72,12 @@ function tabCount (line: string, tabConfig: any): number {
 	return count;
 };
 
+/**
+* Calculates the number of leading and trailing blank lines in a string
+* 
+* @param  {String} lines The text to count blank lines in
+* @return {Number} The number of blank lines
+*/
 function preBlankLineCount (lines:string[]): number {
 	let count = 0;
 	if (lines.length <= 1) { return count; }
@@ -76,6 +89,12 @@ function preBlankLineCount (lines:string[]): number {
 	return count;
 };
 
+/**
+* Gets the tab configuration
+* 
+* @param  {Array} data The array of cell header names
+* @return {TabConfig|undefined} VSCODE configuration
+*/
 function getTabConfig(): TabConfig|undefined {
 	const editor = vscode.window.activeTextEditor;
 	if (!editor) { return; }
@@ -85,6 +104,11 @@ function getTabConfig(): TabConfig|undefined {
 	};
 }
 
+/**
+* Check to see if a key has been set for the Codex service
+* 
+* @return {Boolean} Whether or not a key has been set
+*/
 function isCodexKeySet(): boolean {
 	let extConfig = vscode.workspace.getConfiguration('vs-code-autocomment');
 	if (extConfig.get('openAI.Key') === null || extConfig.get('openAI.Key') === '') {
@@ -94,12 +118,22 @@ function isCodexKeySet(): boolean {
 	}
 }
 
+/**
+* Test if there is an active Codex key
+* 
+* @return {void}
+*/
 function testCodexKey(): void {
 	if (!isCodexKeySet()) {
 		showSetupKeyPopup();
 	}
 }
 
+/**
+* Generates the command to show a key setup popup
+* 
+* @return {void}
+*/
 function showSetupKeyPopup(): void {
 	vscode.window.showInformationMessage('Please set the Open AI API Key in the settings', 'Open Settings')
 	.then(selection => {
@@ -109,6 +143,11 @@ function showSetupKeyPopup(): void {
 	});
 }
 	
+/**
+* Gets selected content
+*
+* @return {String} The selected text
+*/
 function getSelectedText(): string|undefined {
 	const editor = vscode.window.activeTextEditor;
 	if (!editor) { return; }
@@ -118,6 +157,13 @@ function getSelectedText(): string|undefined {
 	return editor.document.getText(range);
 }
 
+/**
+* Generates a prefix for a language
+* 
+* @param {string} languageId The language identifier, there should be a corresponding property
+*			in the languagePrefix module
+* @return {string} The full language prefix for all examples
+*/
 function structureLangPrefix(languageId: string): string {
 	if (languageId === undefined) { return ''; }
 	
@@ -140,6 +186,13 @@ function structureLangPrefix(languageId: string): string {
 	return prefix;
 }
 
+/**
+* Fetch a comment from the OpenAI API
+* 
+* @param  {String} text The comment body
+* @param  {String} languageId Language of the comment
+* @return {String} The fetched comment
+*/
 async function getComment(text: string|undefined, languageId: string|undefined) {
 	if(text === undefined || languageId === undefined) {
 		return 'No text selected';
@@ -173,6 +226,13 @@ async function getComment(text: string|undefined, languageId: string|undefined) 
 	}
 }
 
+/**
+* Makes an API request to the openAI API
+*
+* @param  {String} url The url to post to
+* @param  {Object} data The data to be posted
+* @return {Promise} The promise containing the json response
+*/
 function postRequest(url: string, data: any): Promise<any> {
 	return axios.post(url, data, {
 		headers: {
