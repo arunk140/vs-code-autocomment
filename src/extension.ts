@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import * as lp from './languagePrefix';
-const axios = require('axios');
+import axios from 'axios';
 
 interface TabConfig { insertSpaces: boolean; tabSize: number }
 

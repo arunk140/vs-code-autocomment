@@ -1,15 +1,23 @@
 {
   "name": "vs-code-autocomment",
   "displayName": "OpenAI Auto DocString",
-  "repository" : "https://github.com/arunk140/vs-code-autocomment",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arunk140/vs-code-autocomment.git"
+  },
+  "private": true,
+  "publisher": "arunk140",
   "description": "Generate Docstrings for functions using the OpenAI API.",
   "version": "1.0.0",
   "engines": {
     "vscode": "^1.62.0"
   },
   "categories": [
+    "Machine Learning",
+    "Programming Languages",
     "Other"
   ],
+  "license": "SEE LICENSE IN LICENSE",
   "activationEvents": [
     "onCommand:vs-code-autocomment.genCommentFrmSelection"
   ],
@@ -50,7 +58,10 @@
           "type": "string",
           "description": "The ID of the engine to use for this request.",
           "default": "davinci-codex",
-          "enum": ["davinci-codex", "cushman-codex"],
+          "enum": [
+            "davinci-codex",
+            "cushman-codex"
+          ],
           "enumDescriptions": [
             "Most capable Codex model. Particularly good at translating natural language to code.",
             "Almost as capable as Davinci Codex, but slightly faster. This speed advantage may make it preferable for real-time applications."
@@ -63,7 +74,6 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js"
   },
@@ -78,6 +88,7 @@
     "eslint": "^8.1.0",
     "glob": "^7.1.7",
     "mocha": "^9.1.3",
+    "vsce": "^2.5.1",
     "typescript": "^4.4.4"
   },
   "dependencies": {
