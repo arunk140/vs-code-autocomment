@@ -111,7 +111,7 @@ function getTabConfig(): TabConfig|undefined {
 */
 function isCodexKeySet(): boolean {
 	let extConfig = vscode.workspace.getConfiguration('vs-code-autocomment');
-	if (extConfig.get('openAI.Key') === null || extConfig.get('openAI.Key') === '') {
+	if (extConfig.get('openAI.key') === null || extConfig.get('openAI.key') === '') {
 		return false;
 	} else {
 		return true;
@@ -198,7 +198,7 @@ async function getComment(text: string|undefined, languageId: string|undefined) 
 		return 'No text selected';
 	}
 	const engine:string = vscode.workspace.getConfiguration('vs-code-autocomment').get('openAI.Engine') ?? 'davinci-codex';
-	const temperature:number = vscode.workspace.getConfiguration('vs-code-autocomment').get('openAI.temperature') ?? 0;
+	const temperature:number = vscode.workspace.getConfiguration('vs-code-autocomment').get('openAI.temperature') ?? 0.9;
 	const appendExamples:boolean = vscode.workspace.getConfiguration('vs-code-autocomment').get('general.appendPredefinedExamples') ?? true;
 
 	const url = 'https://api.openai.com/v1/engines/' + engine + '/completions';
@@ -239,7 +239,7 @@ function postRequest(url: string, data: any): Promise<any> {
 			// eslint-disable-next-line @typescript-eslint/naming-convention
 			'Content-Type': 'application/json',
 			// eslint-disable-next-line @typescript-eslint/naming-convention
-			'Authorization':'Bearer ' + vscode.workspace.getConfiguration('vs-code-autocomment').get('openAI.Key') ?? ''
+			'Authorization':'Bearer ' + vscode.workspace.getConfiguration('vs-code-autocomment').get('openAI.key') ?? ''
 		}
 	});
 }

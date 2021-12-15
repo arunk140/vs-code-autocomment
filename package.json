@@ -47,7 +47,7 @@
         "vs-code-autocomment.openAI.temperature": {
           "type": "number",
           "description": "Higher values means the model will take more risks. Try 0.9 for more creative applications, and 0 (argmax sampling) for ones with a well-defined answer.",
-          "default": "0.9"
+          "default": 0.9
         },
         "vs-code-autocomment.general.appendPredefinedExamples": {
           "type": "boolean",
