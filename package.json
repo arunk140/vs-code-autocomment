@@ -24,19 +24,20 @@
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
-	    {
+      {
         "command": "vs-code-autocomment.genCommentFrmSelection",
         "title": "Generate DocString for Selection"
       }
     ],
-	"menus": {
-		"editor/context": [
-		  {
-        "when": "editorHasSelection && editorLangId =~ /^typescript$|^python$|^php$|^java$|^javascript$/",
-        "command": "vs-code-autocomment.genCommentFrmSelection"
-		  }
-		]
-	},
+    "menus": {
+      "editor/context": [
+        {
+          "when": "editorHasSelection && editorLangId =~ /^typescript$|^python$|^php$|^java$|^javascript$/",
+          "command": "vs-code-autocomment.genCommentFrmSelection",
+          "group": "navigation"
+        }
+      ]
+    },
     "configuration": {
       "properties": {
         "vs-code-autocomment.openAI.key": {
