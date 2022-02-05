@@ -6,6 +6,7 @@
     "url": "https://github.com/arunk140/vs-code-autocomment.git"
   },
   "private": true,
+  "icon": "icon.png",
   "publisher": "ndpnt",
   "description": "Generate Docstring comments using OpenAI.",
   "version": "1.0.0",
