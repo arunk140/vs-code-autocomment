@@ -1,13 +1,13 @@
 {
   "name": "vs-code-autocomment",
-  "displayName": "OpenAI Auto DocString",
+  "displayName": "What's up, Doc?",
   "repository": {
     "type": "git",
     "url": "https://github.com/arunk140/vs-code-autocomment.git"
   },
   "private": true,
-  "publisher": "arunk140",
-  "description": "Generate Docstrings for functions using the OpenAI API.",
+  "publisher": "ndpnt",
+  "description": "Generate Docstring comments using OpenAI.",
   "version": "1.0.0",
   "engines": {
     "vscode": "^1.62.0"
