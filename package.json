@@ -9,7 +9,7 @@
   "icon": "icon.png",
   "publisher": "arunk140",
   "description": "Generate Docstring comments using OpenAI.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "engines": {
     "vscode": "^1.62.0"
   },
