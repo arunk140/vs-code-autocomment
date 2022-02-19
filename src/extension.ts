@@ -111,7 +111,7 @@ function getTabConfig(): TabConfig|undefined {
 */
 function isCodexKeySet(): boolean {
 	let extConfig = vscode.workspace.getConfiguration('vs-code-autocomment');
-	if (extConfig.get('openAI.key') === null || extConfig.get('openAI.key') === '') {
+	if (extConfig.openAI.key === null || extConfig.openAI.key === undefined || extConfig.openAI.key.length === 0) {
 		return false;
 	} else {
 		return true;
@@ -197,9 +197,10 @@ async function getComment(text: string|undefined, languageId: string|undefined) 
 	if(text === undefined || languageId === undefined) {
 		return 'No text selected';
 	}
-	const engine:string = vscode.workspace.getConfiguration('vs-code-autocomment').get('openAI.Engine') ?? 'davinci-codex';
-	const temperature:number = vscode.workspace.getConfiguration('vs-code-autocomment').get('openAI.temperature') ?? 0.9;
-	const appendExamples:boolean = vscode.workspace.getConfiguration('vs-code-autocomment').get('general.appendPredefinedExamples') ?? true;
+	var extConfig = vscode.workspace.getConfiguration('vs-code-autocomment');
+	const engine:string = extConfig.openAI.engine ?? 'davinci-codex';
+	const temperature:number = extConfig.openAI.temperature ?? 0.9;
+	const appendExamples:boolean = extConfig.general.appendPredefinedExamples ?? true;
 
 	const url = 'https://api.openai.com/v1/engines/' + engine + '/completions';
 	const commentPostfix = "\n" + lp.generateStr[languageId];
@@ -239,7 +240,7 @@ function postRequest(url: string, data: any): Promise<any> {
 			// eslint-disable-next-line @typescript-eslint/naming-convention
 			'Content-Type': 'application/json',
 			// eslint-disable-next-line @typescript-eslint/naming-convention
-			'Authorization':'Bearer ' + vscode.workspace.getConfiguration('vs-code-autocomment').get('openAI.key') ?? ''
+			'Authorization':'Bearer ' + vscode.workspace.getConfiguration('vs-code-autocomment').openAI.key ?? ''
 		}
 	});
 }

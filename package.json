@@ -7,7 +7,7 @@
   },
   "private": true,
   "icon": "icon.png",
-  "publisher": "ndpnt",
+  "publisher": "arunk140",
   "description": "Generate Docstring comments using OpenAI.",
   "version": "1.0.0",
   "engines": {
