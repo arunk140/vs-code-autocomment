@@ -7,3 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0]
 
 - Initial release with support for JavaScript, TypeScript, Java, Python and PHP.
+
+## [1.0.3]
+
+- Better Error Logging using VS Code Logging Channels
