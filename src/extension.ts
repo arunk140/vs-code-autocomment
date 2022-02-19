@@ -194,6 +194,7 @@ function structureLangPrefix(languageId: string): string {
 * @return {String} The fetched comment
 */
 async function getComment(text: string|undefined, languageId: string|undefined) {
+	let logging = vscode.window.createOutputChannel("What's up, Doc?");
 	if(text === undefined || languageId === undefined) {
 		return 'No text selected';
 	}
@@ -223,7 +224,8 @@ async function getComment(text: string|undefined, languageId: string|undefined) 
 		const response = await postRequest(url, body);
 		return response.data.choices[0].text;
 	} catch (error) {
-		showSetupKeyPopup();
+		logging.appendLine(error as string);
+		logging.show();
 	}
 }
 
