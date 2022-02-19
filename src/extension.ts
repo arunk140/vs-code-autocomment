@@ -111,7 +111,7 @@ function getTabConfig(): TabConfig|undefined {
 */
 function isCodexKeySet(): boolean {
 	let extConfig = vscode.workspace.getConfiguration('vs-code-autocomment');
-	if (extConfig.openAI.key === null || extConfig.openAI.key === undefined || extConfig.openAI.key.length === 0) {
+	if (extConfig.openAI.key.length === 0) {
 		return false;
 	} else {
 		return true;

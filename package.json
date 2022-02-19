@@ -9,7 +9,7 @@
   "icon": "icon.png",
   "publisher": "arunk140",
   "description": "Generate Docstring comments using OpenAI.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "engines": {
     "vscode": "^1.62.0"
   },
@@ -44,7 +44,7 @@
         "vs-code-autocomment.openAI.key": {
           "type": "string",
           "description": "The OpenAI API uses API keys for authentication. Visit your Open AI API Keys page to retrieve the API key you'll use in your requests.",
-          "default": null
+          "default": ""
         },
         "vs-code-autocomment.openAI.temperature": {
           "type": "number",
@@ -73,7 +73,7 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
+    "vscode:prepublish": "yarn compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "lint": "eslint src --ext ts",
