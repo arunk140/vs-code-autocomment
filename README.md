@@ -28,3 +28,11 @@ This extension contributes the following settings:
 ### 1.0.0
 
 Initial release - Support for PHP, Python, Java, JavaScript and TypeScript
+
+### 1.0.3
+
+Better Error Logging using VS Code Logging Channels
+
+### 1.0.4
+
+Added Toggle in Extension Settings to Disable SSL Verification (SSL Verification is enabled by Default) (Temporary Fix for #1)

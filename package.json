@@ -9,7 +9,7 @@
   "icon": "icon.png",
   "publisher": "arunk140",
   "description": "Generate Docstring comments using OpenAI.",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "engines": {
     "vscode": "^1.62.0"
   },
@@ -50,6 +50,11 @@
           "type": "number",
           "description": "Higher values means the model will take more risks. Try 0.9 for more creative applications, and 0 (argmax sampling) for ones with a well-defined answer.",
           "default": 0.9
+        },
+        "vs-code-autocomment.general.disableSSLVerification": {
+          "type": "boolean",
+          "default": false,
+          "description": "Disable SSL verification for HTTPS requests. This is not recommended. (Fixes #1 on some machines)"
         },
         "vs-code-autocomment.general.appendPredefinedExamples": {
           "type": "boolean",

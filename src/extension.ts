@@ -237,6 +237,11 @@ async function getComment(text: string|undefined, languageId: string|undefined) 
 * @return {Promise} The promise containing the json response
 */
 function postRequest(url: string, data: any): Promise<any> {
+	
+	if ((vscode.workspace.getConfiguration('vs-code-autocomment').general.disableSSLVerification ?? false) === true) {
+		// DISABLE SSL VERIFICATION (Temp Fix for #1) 
+		process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+	}
 	return axios.post(url, data, {
 		headers: {
 			// eslint-disable-next-line @typescript-eslint/naming-convention

@@ -11,3 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.3]
 
 - Better Error Logging using VS Code Logging Channels
+
+## [1.0.4]
+
+- Added Toggle in Extension Settings to Disable SSL Verification (SSL Verification is enabled by Default) (Temporary Fix for #1)
