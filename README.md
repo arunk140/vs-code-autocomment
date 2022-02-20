@@ -21,6 +21,7 @@ This extension contributes the following settings:
 * `vs-code-autocomment.openAI.key`: Open AI API Key
 * `vs-code-autocomment.openAI.temperature`: Temperature (default: 0.9)
 * `vs-code-autocomment.general.appendPredefinedExamples`: Append predefined examples (default: true)
+* `vs-code-autocomment.general.disableSSLVerification`: Disable SSL Verification (default: false)
 * `vs-code-autocomment.openAI.engine`: Engine (default: 'davinci-codex')
 
 ## Release Notes
